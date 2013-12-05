@@ -1,0 +1,337 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>CSEP551 Winter 2012 -- Programming Assignment #2</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<font face="Arial" size="2">
+
+<h2>CSEP551 -- Programming Assignment #2</h2>
+
+<b>Out:</b>  Tuesday, February 7th, 2012<br>
+<b>Due:</b>  Monday, February 27th, 2012, by 11:45pm
+
+<p>
+</p><center>
+[
+  <a href="#overview">overview</a> |
+  <a href="#features">server requirements</a> |
+  <a href="#code">code requirements</a> |
+  <a href="#threaded">threaded server</a> |
+  <a href="#eventdriven">event-driven server</a> |
+  <a href="#turnin">what to turn in</a>
+]
+</center>
+<p>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="overview">Overview</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+</p><p>
+
+In this assignment, you will implement two versions of a simple web
+server, using C or C++ as your programming langauge.  In the first
+version, you will use threads (via the pthreads interface) to handle
+requests concurrently.  In the second version, you will use a single
+thread and event-driven asynchronous I/O to handle requests
+concurrently.  The goal of the assignment is to let you explore these
+two different styles of concurrent programmiung, and to give you some
+exposure to the nuts and bolts of network programming and the web.
+</p><p>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="features">Server Requirements</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+</p><p>
+
+Obviously, implementing a fully-featured web server that is capable of
+handling all aspects of modern Web protocols would be completely
+unrealistic for a two-week assignment.  Instead, we want you to focus
+on a relatively small subset of features.  Your server should support
+all of the following, for both the threaded and event-driven versions.
+</p><p>
+
+<b>Concurrent requests:</b> most importantly, your server should be
+able to handle and process HTTP requests concurrently.  In other
+words, it should be possible for multiple clients (or even a single
+client) to open several HTTP requests to your server simultaneously,
+and your server should make progress on reading the requests from the
+network, generating responses, and writing the responses back to the
+clients concurrently.  Said differently, the server should not
+serialize requests: if one request progresses slowly (e.g., the client
+is on a slow network connection), the other requests should not block
+behind that slow request.
+</p><p>
+
+</p><div style="float:right; padding:10px">
+  <img src="a2/mountain.jpg" style="border: 2px solid blue;" align="middle" height="217" width="359">
+</div>
+
+<b>Simple HTTP/1.1 support:</b> the HTTP specification is complex and
+large.  You only need to handle a very simple subset of it.
+Specifically, you need to be able to handle GET requests.  You do not
+need to handle persistent connections, pipelined requests, chunked
+transfers, or other advanced HTTP/1.1 features.  You will need to
+write a simple parser to parse HTTP requests and extract the requested
+URL from them, but that should be pretty easy to do.  You will also
+need to figure out how to generate a well-formatted HTTP response.
+So, to do these two things, you should read up on the HTTP protocol
+enough to determine how to do this.  I'd recommend you experiment with
+real browsers and real servers: figure out how to use a program like
+netcat (nc on linux) to open a listening socket and direct a browser
+to it, in order to see what real browser requests look like.  Also
+figure out how to use telnet to connect to a real web server (e.g.,
+www.cs.washington.edu) to figure out what a real server response looks
+like.  Then, mimic that.
+<p>
+
+<b>Static, in-memory files:</b> instead of reading requested content
+from files in the file-system, you should instead have a set of static
+HTML pages hard-coded into your program.  When a client requests one
+of them, you should return that static content.  If a client requests
+some other page, you should return an HTTP error indicating the page
+could not be found.  The specific page URLs and content you should
+support are:
+
+</p><ul>
+  <li> <tt>/a2.html</tt> &#8212; this page;  use "view source" from a
+  browser (or some other tool) to get at the HTML of this page, and
+  include it in your server.  Be sure to return MIME-type
+  <tt>text/html</tt> for this page.
+  <p>
+
+  </p></li><li> <tt>/book/dracula.html</tt> &#8212; the project gutenberg version
+  of the book Dracula, which is <a href="http://www.gutenberg.org/files/345/345-h/345-h.htm">available
+  from here</a>.  Note this is a fairly large document, which means it
+  is unlikely that you will be able to write the entire document in a
+  single non-blocking write() system call.  The MIME-type for this
+  page should also be <tt>text/html</tt>.
+  <p>
+
+  </p></li><li> <tt>/a2/mountain.jpg</tt> &#8212; the image of Mt. Shasta
+  seen on the right.
+  <p>
+
+</p></li></ul>
+<p>
+
+<b>Command-line specifiable port:</b> typically a web server runs on
+port 80, but there is nothing requiring this.  Your web server should
+take a single command-line argument, which is the port number on which
+your server listens.  Make sure this port is listening on the external
+IP address of the machine, rather than the loop-back IP address.
+(i.e., when we run your server, it should be possible to connect to
+the server from a browser running different machine.)
+
+</p><p>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="code">Code Requirements</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+</p><p>
+
+For this assignment, you will implement the two servers largely from
+scratch in either C or C++.  Here are some guidelines and requirements
+about your code:
+
+</p><ul>
+
+  <li> Your code must compile and run on a standard Linux
+  installation.  You should have an account on the CSE instructional
+  linux cluster, including the machine attu1.cs.washington.edu.
+  Before you turn in your code, please make sure you can compile it on
+  attu1; we will be using that machine to compile and test your
+  solution.  If you make use of any third-party code, you need to
+  include that code in your turned-in assignment, in source or library
+  form.  We will NOT be downloading and installing third-party code
+  when testing your solution.
+  <p>
+
+  </p></li><li> Your code must exist within a single directory called "src/"
+  within your turned-in solution.  Within that directory, there should
+  be a Makefile.  We will run "make all" to compile your code and
+  product two binaries -- one for the threaded server and one for the
+  event-driven server.  Your threaded server binary should be called
+  "551server_threaded" and your event-driven server binary should be
+  called "551server_eventdriven".  Please don't submit binaries as
+  part of your turn-in; we must be able to compile binaries from
+  source using the command "make all".
+  <p>
+
+  </p></li><li> You should reuse code between your two servers wherever
+  possible.  In particular, you should reuse code for request parsing
+  and response synthesis.
+  <p>
+
+  </p></li><li> Your code should be clean, modular, readable, and
+  well-commented.  We will run your code under valgrind to make sure
+  there are no memory leaks or errors.
+  <p>
+
+  </p></li><li> Feel free to use third-party code to simplify the job of
+  creating and managing sockets.  But, you should not use third-party
+  code to handle the details of creating threads, setting up
+  asynchronous events and I/O, or parsing/generating HTTP; you must do
+  this part yourself.
+  <p>
+
+  </p></li><li> As a small hint, you should make sure you set up a default
+  signal handler for the SIGPIPE signal that does nothing.  By
+  default, Linux will send your process the SIGPIPE signal whenever a
+  client drops its end of a TCP connection.  If you don't have a
+  signal handler defined for it, your process will crash out.
+  <p>
+  
+</p></li></ul>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="threaded">Threaded Server</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+<p>
+
+For the threaded server, you should implement your code to have a main
+thread that first creates the listening socket for your server, and
+then permanently enters a loop, where it:
+
+</p><ul>
+  <li> blocks on the accept system call waiting for a new connection
+  to arrive.
+  <p>
+
+  </p></li><li> creates and dispatches a new thread (using the pthreads
+  interface) to handle that connection.  You should be sure to detach
+  the thread so that your main thread doesn't have to worry about
+  joining with the helper.
+  <p>
+</p></li></ul>
+
+Each dispatched thread should read in a request from the new network
+connection, generate a response, write the response, and then close
+the network connection to the client.  The thread should also handle
+the case where the request is poorly formatted, or the connection
+to the client drops unexpectedly.  Be sure not to leak memory or file
+descriptors.
+<p>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="eventdriven">Event driven server</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+</p><p>
+
+Your event-driven server should have a single thread that processes
+events in an event loop.  The kinds of events this thread must detect
+and handle include:
+
+</p><ul>
+  <li> a new connection arrives; when this happens, you need to create
+  and store some state for the connection that you use to keep track
+  of data that has been received so far, whether you have received a
+  full request, the response you generate, and how much of the
+  response you have written.
+  <p>
+
+  </p></li><li> there is data waiting to be read from one of the open requests;
+  when this happens, you should read that data.
+  <p>
+
+  </p></li><li> once you've generated a response for a connection, you should
+  detect events that tell you that the connection's socket is
+  writeable (i.e., there is buffer space in the OS, and therefore your
+  write system call will be able to hand the OS some data)
+  <p>
+
+  </p></li><li> a connection has closed, either expectedly or unexpectedly
+  <p>
+
+</p></li></ul>
+
+You will need to learn how to set a socket to be non-blocking, so that
+your accept, read, write, and close system calls don't block your
+single thread.  As well, you should learn about the poll system call,
+and use that to register interest in events and receive those events.
+<p>
+
+Writing an event-driven server can be confusing.  You essentially need
+to invert the control flow that you're used to with a threaded server.
+Instead of having a thread sequentially read, generate, and write to
+handle a connection, your single thread needs to juggle all of the
+connections simultaneously, processing data when possible on each as
+events arrive.  You should probably think about creating a simple
+state machine for each connection to keep track of it, and then
+transition from state to state (READING, WRITING) when handling
+events.
+</p><p>
+
+<table border="0" cellpadding="4" cellspacing="0" width="100%">
+  <tbody><tr bgcolor="#afff00">
+    <td class="part" width="100%">
+      <font face="Arial" size="3">
+      <a name="turnin">What to turn in</a>
+      </font>
+    </td>
+  </tr>
+</tbody></table>
+</p><p>
+
+You should use the following <a href="https://catalyst.uw.edu/collectit/dropbox/gribble/20067">catalyst
+dropbox</a> to submit your assignment.  You should submit to the
+"assignment #2" box a single .tar.gz archive that contains the
+following:
+
+</p><ul>
+  <li> a text file, README.txt, that contains your name, email
+  address, and a brief description of architecture of your server and
+  how that maps to your source files.  In particular, describe each of
+  the major modules or interfaces you designed in your solution, and
+  how they fit together to solve the assignment.  Also mention any
+  third-party code you used
+  <p>
+
+  </p></li><li> a subdirectory called "src"
+  <p>
+
+  </p></li><li> inside this subdirectory, you should include a Makefile and
+  your source code.  As well, inside this directory, include any
+  third-party code you relied upon.
+  <p>
+</p></li></ul>
+
+As previously mentioned, before you submit your code, please copy it
+to attu1.cs.washington.edu and make sure that you're able to compile,
+run, and successfully exercise both of your servers on that machine,
+since we'll be doing our testing and grading on it.
+
+</font>
+
+
+</body></html>
