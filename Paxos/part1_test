@@ -1,0 +1,13 @@
+#!/bin/bash
+rm Paxos*.txt
+ant clean
+ant all
+bash test1
+sleep 3
+bash test2
+sleep 3
+bash test3
+sleep 3
+bash test4
+sleep 3
+bash test5

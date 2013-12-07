@@ -1,0 +1,25 @@
+<project  name="Paxos" basedir=".">
+    <property name="classes.dir" value="classes"/>
+
+    <target name="clean">
+        <delete dir="classes"/>
+    </target>
+
+    <target name="interface">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="interface" destdir="${classes.dir}" includeAntRuntime="false"/>
+    </target>
+
+     <target name="server" depends="interface">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="server" destdir="${classes.dir}" includeAntRuntime="false"/>
+    </target>
+
+     <target name="client" depends="interface">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="client" destdir="${classes.dir}" includeAntRuntime="false"/>
+    </target>
+
+    <target name="all" depends="interface, server, client" />
+
+</project>

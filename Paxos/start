@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Start rmiregistry
+cd classes
+rmiregistry 8123 &
+RPMPID=$!
+cd ..
+
+# java -classpath classes Server Paxos1 localhost Paxos2 localhost Paxos3 8123 &
+# PAXOS1=$!
+
+java -classpath classes Server Paxos2 localhost Paxos1 localhost Paxos3 8123 &
+PAXOS2=$!
+
+java -classpath classes Server Paxos3 localhost Paxos1 localhost Paxos2 8123 
+PAXOS3=$!
+
+
+# kill $PAXOS1
+kill $PAXOS2
+kill $PAXOS3
+kill $RPMPID
+rm Paxos*.txt

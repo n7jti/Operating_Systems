@@ -1,0 +1,47 @@
+#!/bin/bash
+
+echo
+echo Starting Test 1: Success Case, and Recovering State After Crash, 
+echo
+
+# Startup
+cd classes
+rmiregistry 8123 &
+RPMPID=$!
+cd ..
+sleep 1
+java -classpath classes Server Paxos1 localhost Paxos2 localhost Paxos3 8123 &
+PAXOS1=$!
+java -classpath classes Server Paxos2 localhost Paxos1 localhost Paxos3 8123 &
+PAXOS2=$!
+java -classpath classes Server Paxos3 localhost Paxos1 localhost Paxos2 8123 &
+PAXOS3=$!
+sleep 1
+
+
+# Propose a value
+java -classpath classes Client localhost Paxos1 8123 propose 1000
+
+# See what we've leared
+java -classpath classes Client localhost Paxos1 8123 learn
+
+# Check that we can get it from the 2nd replica
+java -classpath classes Client localhost Paxos2 8123 learn
+
+# Check that we can get it from the 3rd replica
+java -classpath classes Client localhost Paxos3 8123 learn
+
+# See that if we kill and revive a replica, that the value remains learned
+kill $PAXOS3
+java -classpath classes Server Paxos3 localhost Paxos1 localhost Paxos2 8123 &
+PAXOS3=$!
+sleep 1
+java -classpath classes Client localhost Paxos3 8123 learn
+
+#cleanup
+kill $PAXOS1
+kill $PAXOS2
+kill $PAXOS3
+kill $RPMPID
+rm Paxos*.txt
+

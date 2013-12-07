@@ -1,0 +1,332 @@
+Buildfile: /home/alanl/turnin/problemset3/part1/build.xml
+
+clean:
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
+Buildfile: /home/alanl/turnin/problemset3/part1/build.xml
+
+interface:
+    [mkdir] Created dir: /home/alanl/turnin/problemset3/part1/classes
+    [javac] Compiling 4 source files to /home/alanl/turnin/problemset3/part1/classes
+
+server:
+    [javac] Compiling 1 source file to /home/alanl/turnin/problemset3/part1/classes
+
+client:
+    [javac] Compiling 1 source file to /home/alanl/turnin/problemset3/part1/classes
+
+all:
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+
+Starting Test 1: Success Case, and Recovering State After Crash,
+
+Round #1 started by Paxos1
+Prepare accepted by Paxos1
+Prepare accepted by Paxos2
+Prepare accepted by Paxos3
+Value accepted by Paxos1:1000
+Value accepted by Paxos2:1000
+Value accepted by Paxos3:1000
+Proposed: 1000
+1000 learned!
+1000 learned!
+1000 learned!
+1000 learned!
+
+Starting Test 2: Learn from Replica that was down during Consensus
+
+Server not found: Paxos3
+Round #1 started by Paxos1
+Prepare accepted by Paxos1
+Prepare accepted by Paxos2
+Value accepted by Paxos1:1000
+Value accepted by Paxos2:1000
+Proposed: 1000
+1000 learned!
+1000 learned!
+
+Starting Test 3: Building consensus with prevous prepare in the system
+
+Prepare accepted by Paxos2
+Prepare Response: false 0 a 0
+Prepare accepted by Paxos3
+Prepare Response: false 0 a 0
+Round #1 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #2 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #3 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #4 started by Paxos1
+Prepare accepted by Paxos1
+Prepare accepted by Paxos2
+Prepare accepted by Paxos3
+Value accepted by Paxos1:123
+Value accepted by Paxos2:123
+Value accepted by Paxos3:123
+Proposed: 123
+123 learned!
+
+Starting Test 4: Build consensus with previously accepted proposal
+
+Prepare accepted by Paxos2
+Prepare Response: false 0 a 0
+Prepare accepted by Paxos3
+Prepare Response: false 0 a 0
+Value accepted by Paxos3:987
+Accept: true 3 Paxos2 987
+Round #1 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #2 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #3 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #4 started by Paxos1
+Prepare accepted by Paxos1
+Prepare accepted by Paxos2
+Prepare accepted by Paxos3
+Value accepted by Paxos1:987
+Value accepted by Paxos2:987
+Value accepted by Paxos3:987
+Proposed: 123
+987 learned!
+
+Starting Test 5: Competing Proposers
+
+Prepare accepted by Paxos2
+Prepare Response: false 0 a 0
+Prepare accepted by Paxos3
+Prepare Response: false 0 a 0
+Round #1 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #2 started by Paxos1
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Round #1 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #2 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #3 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.Round #4 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+
+Round #3 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #5 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #4 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #6 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #7 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Round #5 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #8 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #6 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Round #9 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #10 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #11 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #12 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #13 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #7 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Round #14 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #15 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #8 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #16 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #17 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Round #9 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #18 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #10 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Round #19 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #20 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Round #11 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #21 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #12 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Round #22 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #23 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Round #13 started by Paxos1Prepare rejected by Paxos3 proposal number too low.
+
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #24 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #25 started by Paxos2
+Prepare rejected by Paxos2 proposal number too low.
+Prepare accepted by Paxos1
+Round #14 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Round #26 started by Paxos2
+Prepare accepted by Paxos2
+Prepare accepted by Paxos1
+Prepare rejected by Paxos3 proposal number too low.
+Prepare accepted by Paxos3
+Value accepted by Paxos2:222
+Round #15 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Value accepted by Paxos1:222
+Value accepted by Paxos3:222
+Prepare rejected by Paxos3 proposal number too low.
+Proposed: 222
+Round #16 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #17 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #18 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #19 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #20 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #21 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #22 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #23 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #24 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #25 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #26 started by Paxos1
+Prepare rejected by Paxos1 proposal number too low.
+Prepare rejected by Paxos2 proposal number too low.
+Prepare rejected by Paxos3 proposal number too low.
+Round #27 started by Paxos1
+Prepare accepted by Paxos1
+Prepare accepted by Paxos2
+Prepare accepted by Paxos3
+Proposed: 111
+222 learned!

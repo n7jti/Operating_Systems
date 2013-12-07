@@ -1,0 +1,37 @@
+#!/bin/bash
+
+echo
+echo Starting Test 2: Learn from Replica that was down during Consensus
+echo
+
+# Startup, but leave one replical down
+cd classes
+rmiregistry 8123 &
+RPMPID=$!
+cd ..
+sleep 1
+java -classpath classes Server Paxos1 localhost Paxos2 localhost Paxos3 8123 &
+PAXOS1=$!
+java -classpath classes Server Paxos2 localhost Paxos1 localhost Paxos3 8123 &
+PAXOS2=$!
+sleep 1
+
+# Propose a value
+java -classpath classes Client localhost Paxos1 8123 propose 1000
+
+# See what we've leared
+java -classpath classes Client localhost Paxos1 8123 learn
+
+# Now the 3rd replica comes back to life, after the party is over.  See what we learn from it
+java -classpath classes Server Paxos3 localhost Paxos1 localhost Paxos2 8123 &
+PAXOS3=$!
+sleep 1
+java -classpath classes Client localhost Paxos3 8123 learn
+
+#cleanup
+kill $PAXOS1
+kill $PAXOS2
+kill $PAXOS3
+kill $RPMPID
+rm Paxos*.txt
+
